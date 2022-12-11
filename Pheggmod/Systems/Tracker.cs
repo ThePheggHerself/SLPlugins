@@ -12,7 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pheggmod
+namespace Pheggmod.Systems
 {
 	public class Tracker
 	{

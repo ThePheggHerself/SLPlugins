@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PluginAPI.Core;
 
-namespace Pheggmod
+namespace Pheggmod.Systems
 {
 	public class DynamicTags
 	{
