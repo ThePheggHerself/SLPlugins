@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class Tower2Command : ICommand, IUsageProvider
 	{
 		public string Command => "tower2";

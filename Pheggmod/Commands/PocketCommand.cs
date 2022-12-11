@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class PocketCommand : ICommand, IUsageProvider
 	{
 		public string Command => "pocket";

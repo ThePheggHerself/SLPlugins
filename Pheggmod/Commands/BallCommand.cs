@@ -11,6 +11,7 @@ using Pheggmod;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class BallCommand : ICommand, IUsageProvider
 	{
 		public string Command => "ball";

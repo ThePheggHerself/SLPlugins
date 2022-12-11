@@ -11,6 +11,7 @@ using UnityEngine.Android;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class FlashCommand : ICommand, IUsageProvider
 	{
 		public string Command => "flash";

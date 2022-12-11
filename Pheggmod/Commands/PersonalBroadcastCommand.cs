@@ -11,6 +11,7 @@ using UnityEngine.Android;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class PersonalBroadcastCommand : ICommand
 	{
 		public string Command => "pbc";

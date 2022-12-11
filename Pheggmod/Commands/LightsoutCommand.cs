@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class LightsoutCommand : ICommand
 	{
 		public string Command => "lightsout";

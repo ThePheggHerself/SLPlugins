@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class GrenadeCommand : ICommand, IUsageProvider
 	{
 		public string Command => "grenade";

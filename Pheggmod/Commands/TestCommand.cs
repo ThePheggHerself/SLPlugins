@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class TestCommand : ICommand, IUsageProvider
 	{
 		public string Command => "nevergonna";

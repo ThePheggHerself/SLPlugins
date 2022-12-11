@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Pheggmod.Commands
 {
+	[CommandHandler(typeof(RemoteAdminCommandHandler))]
 	public class DropCommand : ICommand, IUsageProvider
 	{
 		public string Command => "drop";
