@@ -3,18 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32728.150
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pheggmod", "Pheggmod\Pheggmod.csproj", "{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicTags", "DynamicTags\DynamicTags.csproj", "{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordLab", "DiscordLab\DiscordLab.csproj", "{7094DF01-C506-4628-8B04-3CFA007CF564}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		HeavyModded|Any CPU = HeavyModded|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}.HeavyModded|Any CPU.ActiveCfg = Debug|Any CPU
+		{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}.HeavyModded|Any CPU.Build.0 = Debug|Any CPU
 		{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{642C8E49-BCC1-46F1-A68D-F7FAC59E589E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7094DF01-C506-4628-8B04-3CFA007CF564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7094DF01-C506-4628-8B04-3CFA007CF564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7094DF01-C506-4628-8B04-3CFA007CF564}.HeavyModded|Any CPU.ActiveCfg = Debug|Any CPU
+		{7094DF01-C506-4628-8B04-3CFA007CF564}.HeavyModded|Any CPU.Build.0 = Debug|Any CPU
+		{7094DF01-C506-4628-8B04-3CFA007CF564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7094DF01-C506-4628-8B04-3CFA007CF564}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

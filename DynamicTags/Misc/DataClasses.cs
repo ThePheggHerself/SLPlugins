@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pheggmod
+namespace DynamicTags
 {
 	public class TagData
 	{

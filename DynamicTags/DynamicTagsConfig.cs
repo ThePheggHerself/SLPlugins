@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pheggmod
+namespace DynamicTags
 {
-	public class Config
+	public class DynamicTagsConfig
 	{
 		/// <summary>
 		/// Endpoint location for the external web API that the plugin will interact with.

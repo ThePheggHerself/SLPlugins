@@ -1,23 +1,24 @@
 ﻿using Newtonsoft.Json.Linq;
+using PluginAPI.Core.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pheggmod
+namespace DynamicTags
 {
 	public static class Extensions
 	{
 		public static string RejectReasonNoPerms(this string permission) => $"You do not have the required permission to execute this command: {permission}";
 		public static List<ReferenceHub> GetPlayersFromString(string users)
 		{
+			var allHubs = ReferenceHub.AllHubs;
 			if (users.ToLower() == "*")
-				return ReferenceHub.GetAllHubs().Values.Where(p => !string.Equals(p.nicknameSync.MyNick, "Dedicated Server", StringComparison.OrdinalIgnoreCase)).ToList();
+				return allHubs.Where(p => !string.Equals(p.nicknameSync.MyNick, "Dedicated Server", StringComparison.OrdinalIgnoreCase)).ToList();
 
 			string[] playerStrings = users.Split('.');
 			List<ReferenceHub> playerList = new List<ReferenceHub>();
-			List<ReferenceHub> hubs = ReferenceHub.GetAllHubs().Values.ToList();
 
 			foreach (string player in playerStrings)
 			{
@@ -25,10 +26,10 @@ namespace Pheggmod
 					playerList.Add(hub);
 				else
 				{
-					int index = hubs.FindIndex(p => p.queryProcessor.PlayerId.ToString() == player || p.characterClassManager.UserId == player || (player.Length > 2 && p.nicknameSync.MyNick.ToLower().Contains(player)));
-					if (index > -1)
+					var index = allHubs.Where(p => p.PlayerId == id || p.characterClassManager.UserId == player || (player.Length > 2 && p.nicknameSync.MyNick.ToLower().Contains(player)));
+					if (index.Any())
 					{
-						playerList.Add(hubs[index]);
+						playerList.Add(index.First());
 					}
 				}
 			}
