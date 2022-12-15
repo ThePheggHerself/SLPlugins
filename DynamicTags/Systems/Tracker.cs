@@ -24,8 +24,8 @@ namespace DynamicTags.Systems
 
 			using (WebClient client = new WebClient())
 			{
-				if (Extensions.TryParseJSON(client.UploadString(global::DynamicTags.DynamicTags.Config.ApiEndpoint + "PlayerJoin.php", JsonConvert.SerializeObject(new PlayerDetails
-                {
+				if (Extensions.TryParseJSON(client.UploadString(Plugin.Config.ApiEndpoint + "PlayerJoin.php", JsonConvert.SerializeObject(new PlayerDetails
+				{
 					UserId = userid,
 					UserName = "null",
 					Address = ipAddress,
@@ -33,10 +33,11 @@ namespace DynamicTags.Systems
 					ServerPort = Server.Port.ToString()
 				})), out JObject jObj))
 				{
+					//Checks if the external server has blocked the player from joining.
 					if (bool.TryParse(jObj["block"].ToString(), out bool shouldKick) && shouldKick)
 					{
-                        Log.Info($"{userid}'s connection request was rejected. Reason: {jObj["serverReason"].ToString()}");
-                        NetDataWriter Writer = new NetDataWriter();
+						Log.Info($"{userid}'s connection request was rejected. Reason: {jObj["serverReason"].ToString()}");
+						NetDataWriter Writer = new NetDataWriter();
 						Writer.Put((byte)RejectionReason.Custom);
 						Writer.Put(jObj["reason"].ToString());
 						connectionRequest.RejectForce(Writer);
@@ -50,8 +51,8 @@ namespace DynamicTags.Systems
 		{
 			using (WebClient client = new WebClient())
 			{
-				client.UploadString(global::DynamicTags.DynamicTags.Config.ApiEndpoint + "PlayerLeave.php", JsonConvert.SerializeObject(new PlayerDetails
-                {
+				client.UploadString(Plugin.Config.ApiEndpoint + "PlayerLeave.php", JsonConvert.SerializeObject(new PlayerDetails
+				{
 					UserId = player.UserId,
 					UserName = player.Nickname.Replace(':', ' '),
 					Address = player.IpAddress,
@@ -66,8 +67,8 @@ namespace DynamicTags.Systems
 		{
 			using (WebClient client = new WebClient())
 			{
-				client.UploadString(global::DynamicTags.DynamicTags.Config.ApiEndpoint + "PlayerBan.php", JsonConvert.SerializeObject(new PlayerBanDetails
-                {
+				client.UploadString(Plugin.Config.ApiEndpoint + "PlayerBan.php", JsonConvert.SerializeObject(new PlayerBanDetails
+				{
 					playerName = player.Nickname.Replace(':', ' '),
 					playerID = player.UserId,
 					adminName = admin.Nickname.Replace(':', ' '),

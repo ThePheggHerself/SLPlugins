@@ -13,6 +13,8 @@ namespace DynamicTags
 		/// </summary>
 		public string ApiEndpoint { get; set; } = "https://google.co.uk/";
 
-
+		public bool TrackerEnabled { get; set; } = true;
+		public bool TagsEnabled { get; set; } = true;
+		public bool AutomaticNorthwoodReservedSlot { get; set; } = true;
 	}
 }

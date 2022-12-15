@@ -23,7 +23,6 @@ namespace DiscordLab
 
 			EventManager.RegisterEvents<Events>(this);
 
-			//FactoryManager.RegisterPlayerFactory(this, new PlayerFactory());
 
 			if (string.IsNullOrEmpty(Config.Address))
 				Config.Address = Server.ServerIpAddress;

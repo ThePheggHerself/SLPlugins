@@ -5,41 +5,55 @@ using System.Text;
 
 namespace DiscordLab
 {
-	public class msgBase
+	/// <summary>
+	/// Base class for all msg classes (Used for sending messages to the bot).
+	/// </summary>
+	public class MsgBase
 	{
-		public msgBase() { }
-		public string Type;
+		public MsgBase() { }
+
+
+		public MessageType Type;
 	}
 
-	public class msgMessage : msgBase
+	/// <summary>
+	/// <see cref="MsgBase"/> class for sending string messages to the bot (Such as "Hello, World!").
+	/// </summary>
+	public class Msg : MsgBase
 	{
-		public msgMessage(string message)
+		public Msg(string message)
 		{
-			Type = "msg";
+			Type = MessageType.msg;
 			Message = BotConnector.MsgRgx.Replace(message, string.Empty);
 		}
 
 		public string Message;
 	}
-	public class msgCommand : msgBase
+	/// <summary>
+	/// <see cref="MsgBase"/> class for responding to commands recieved by the bot.
+	/// </summary>
+	public class Command : MsgBase
 	{
-		public msgCommand(string channelID, string staffID, string msg)
+		public Command(string channelID, string staffID, string msg)
 		{
 			ChannelID = channelID;
 			StaffID = staffID;
 			CommandMessage = msg;
-			Type = "cmdmsg";
+			Type = MessageType.cmdmsg;
 		}
 
 		public string CommandMessage;
 		public string ChannelID;
 		public string StaffID;
 	}
-	public class msgPList : msgBase
+	/// <summary>
+	/// <see cref="MsgBase"/> class for responding to the bot's request for the player list.
+	/// </summary>
+	public class PlayerList : MsgBase
 	{
-		public msgPList(string channelId)
+		public PlayerList(string channelId)
 		{
-			Type = "plist";
+			Type = MessageType.plist;
 			ChannelID = channelId;
 
 			var players = Player.GetPlayers();
@@ -76,11 +90,15 @@ namespace DiscordLab
 		public string PlayerNames;
 		public string ChannelID;
 	}
-	public class msgStatus : msgBase
+
+	/// <summary>
+	/// <see cref="MsgBase"/> class for keeping the bot's player count status updated.
+	/// </summary>
+	public class Status : MsgBase
 	{
-		public msgStatus()
+		public Status()
 		{
-			Type = "supdate";
+			Type = MessageType.supdate;
 			CurrentPlayers = Player.Count + "/" + Server.MaxPlayers;
 			LastUpdate = DateTime.Now;
 		}
@@ -88,31 +106,39 @@ namespace DiscordLab
 		public string CurrentPlayers { get; }
 		internal DateTime LastUpdate { get; }
 	}
-	public class msgKeepAlive : msgBase
+
+	/// <summary>
+	/// <see cref="MsgBase"/> class for keeping the connection between the bot and server alive.
+	/// </summary>
+	public class KeepAlive : MsgBase
 	{
-		public msgKeepAlive()
+		public KeepAlive()
 		{
-			Type = "keepalive";
+			Type = MessageType.keepalive;
 		}
 	}
 
-	public class botmessage
+	public enum MessageType
 	{
-		//Types: plist, command
-
-		public string Type;
-		public string channel;
-		public string Message = null;
-		public string StaffID = null;
-		public string Staff = null;
-	}
-
-	public enum messageType
-	{
-		MSG = 0,
-		CMD = 1,
-		PLIST = 2,
-		SUPDATE = 3,
-		KEEPALIVE = 4
+		/// <summary>
+		/// <see cref="Msg"/> message
+		/// </summary>
+		msg = 0,
+		/// <summary>
+		/// <see cref="Command"/> message.
+		/// </summary>
+		cmdmsg = 1,
+		/// <summary>
+		/// <see cref="PlayerList"/> message.
+		/// </summary>
+		plist = 2,
+		/// <summary>
+		/// <see cref="Status"/> message.
+		/// </summary>
+		supdate = 3,
+		/// <summary>
+		/// <see cref="KeepAlive"/> message.
+		/// </summary>
+		keepalive = 4
 	}
 }

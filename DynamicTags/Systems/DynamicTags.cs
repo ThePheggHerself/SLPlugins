@@ -19,14 +19,19 @@ namespace DynamicTags.Systems
 		[PluginEvent(ServerEventType.WaitingForPlayers)]
 		public void OnWaitingForPlayers()
 		{
+			//Clears all previous tags held by the server (Prevents players from keeping tags when they have been removed from the external server).
 			Tags.Clear();
 
 			using (WebClient client = new WebClient())
 			{
-				var jObj = JsonConvert.DeserializeObject<JObject>(client.DownloadString(global::DynamicTags.DynamicTags.Config.ApiEndpoint + "GetTags.php"))["tdlist"].ToObject<List<JObject>>();
+				//Downloads a JSON string recieved by the server.
+				//TODO: Make generic list rather than relying on the tdlist field.
+
+				var jObj = JsonConvert.DeserializeObject<JObject>(client.DownloadString(Plugin.Config.ApiEndpoint + "GetTags.php"))["tdlist"].ToObject<List<JObject>>();
 
 				foreach (var a in jObj)
 				{
+					//Parses the data from the jSON string downloaded by the server.
 					bool.TryParse(a["resSlot"].ToString(), out bool hasSlot);
 					string prefix = a["prefix"].ToString();
 					string suffix = a["suffix"].ToString();
@@ -35,9 +40,11 @@ namespace DynamicTags.Systems
 
 					string group = a["group"].ToString();
 
+					//TODO: Merge these together into single "UserID" field.
 					string discordID = a["discordID"].ToString() + "@discord";
 					string userID = a["steamID"].ToString() + (a["steamID"].ToString().StartsWith("7656") ? "@steam" : "@northwood");
 
+					//Adds the tags to the tag list.
 					Tags.Add(discordID, new TagData
 					{
 						UserID = discordID,
@@ -67,6 +74,8 @@ namespace DynamicTags.Systems
 		[PluginEvent(ServerEventType.PlayerCheckReservedSlot)]
 		public void OnReservedSlotCheck(string userid, bool hasReservedSlot)
 		{
+			//Checks if the user has a reserved slot set by the external server. Northwood staff are automatically given a slot.
+			//TODO: Make northwood bypass a config option
 			if (userid.ToLowerInvariant().Contains("northwood") || (Tags.ContainsKey(userid) && Tags[userid].HasReservedSlot))
 				hasReservedSlot = true;
 		}
@@ -74,11 +83,15 @@ namespace DynamicTags.Systems
 		[PluginEvent(ServerEventType.PlayerJoined)]
 		public void OnPlayerJoin(Player player)
 		{
+			//Checks if the user has a tag
 			if (Tags.ContainsKey(player.UserId))
 			{
 				TagData data = Tags[player.UserId];
 
-				player.ReferenceHub.serverRoles.SetGroup(ServerStatic.GetPermissionsHandler().GetGroup(data.Group), true);
+				//This is to stop situations where users have locally assigned perms but gets overridden by NULL perms from the external server.
+				if (!string.IsNullOrEmpty(data.Group))
+					player.ReferenceHub.serverRoles.SetGroup(ServerStatic.GetPermissionsHandler().GetGroup(data.Group), true);
+
 				player.ReferenceHub.serverRoles.SetText(data.FullTag);
 				player.ReferenceHub.serverRoles.SetColor(data.Colour);
 

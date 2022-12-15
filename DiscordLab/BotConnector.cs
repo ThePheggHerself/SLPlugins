@@ -16,12 +16,28 @@ namespace DiscordLab
 {
 	public class BotConnector
 	{
+		/// <summary>
+		/// <see cref="Regex"/> used for cleaning messages (Prevents broken JSON strings and URLs/Discord invites).
+		/// </summary>
 		public static Regex MsgRgx = new Regex("(.gg/)|(<@)|(http)|({)|(})|(<)|(>)|(\")|(\\[)|(\\])");
+		/// <summary>
+		/// <see cref="Regex"/> used for cleaning player names (Prevents broken JSON strings and formatting).
+		/// </summary>
 		public static Regex NameRgx = new Regex("(\\*)|(_)|({)|(})|(@)|(<)|(>)|(\")|(\\[)|(\\])");
 
+		/// <summary>
+		/// <see cref="System.Net.Sockets.Socket"/> connection used to communicate between the bot and server.
+		/// </summary>
 		internal Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		private DateTime _lastMsg;
+		/// <summary>
+		/// <see cref="IPAddress"/> used for the connection to the bot.
+		/// </summary>
+		[Obsolete]
 		public IPAddress Address;
+		/// <summary>
+		/// Characters used to convert ban legnth periods from human readable to minutes.
+		/// </summary>
 		internal static char[] validUnits = { 'm', 'h', 'd', 'w', 'M', 'y' };
 
 		Timer StatusTimer, KeepAliveTimer;
@@ -31,7 +47,7 @@ namespace DiscordLab
 			try
 			{
 				StatusTimer = new Timer(timer => StatusUpdate(), null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
-				StatusTimer = new Timer(timer => KeepAlive(), null, TimeSpan.FromMinutes(25), TimeSpan.FromMinutes(30));
+				KeepAliveTimer = new Timer(timer => KeepAlive(), null, TimeSpan.FromMinutes(25), TimeSpan.FromMinutes(30));
 				new Thread(() =>
 				{
 					BotListener();
@@ -44,24 +60,34 @@ namespace DiscordLab
 			}
 		}
 
-		private msgStatus _lastStatus = null;
+		private Status _lastStatus = null;
+		/// <summary>
+		/// Updates the status for the bot.
+		/// </summary>
 		public void StatusUpdate()
 		{
 			if (_lastStatus == null || _lastStatus.CurrentPlayers != (Player.Count + "/" + Server.MaxPlayers))
 			{
-				var msg = new msgStatus();
+				var msg = new Status();
 				SendMessage(msg);
 				_lastStatus = msg;
 			}
 		}
 
+		/// <summary>
+		/// Prevents the bot's connection from closing.
+		/// </summary>
 		private void KeepAlive()
 		{
 			if ((DateTime.Now - _lastMsg).TotalMinutes > 30)
-				SendMessage(new msgKeepAlive());
+				SendMessage(new KeepAlive());
 		}
 
-		public void SendMessage(msgBase message)
+		/// <summary>
+		/// Sends a message to the bot.
+		/// </summary>
+		/// <param name="message"><see cref="MsgBase"/></param>
+		public void SendMessage(MsgBase message)
 		{
 			if (!Socket.Connected && !OpenConnection())
 				return;
@@ -125,7 +151,7 @@ namespace DiscordLab
 
 							if (jObj["Type"].ToString().ToLower() == "plist")
 							{
-								var msg = new msgPList(jObj["channel"].ToString());
+								var msg = new PlayerList(jObj["channel"].ToString());
 
 								SendMessage(msg);
 							}
@@ -167,7 +193,7 @@ namespace DiscordLab
 					break;
 			}
 
-			SendMessage(new msgCommand(jObj["channel"].ToString(), jObj["StaffID"].ToString(), response));
+			SendMessage(new Command(jObj["channel"].ToString(), jObj["StaffID"].ToString(), response));
 		}
 
 

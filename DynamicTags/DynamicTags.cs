@@ -5,7 +5,7 @@ using PluginAPI.Events;
 
 namespace DynamicTags
 {
-	public class DynamicTags
+	public class Plugin
 	{
 		[PluginConfig]
 		public static DynamicTagsConfig Config;
@@ -17,10 +17,11 @@ namespace DynamicTags
 		{
 			Log.Info($"Plugin is loading...");
 
+			//Registers the events used in the DynamicTags class
 			EventManager.RegisterEvents<Systems.DynamicTags>(this);
+
+			//Registers the events used in the Tracker class
 			EventManager.RegisterEvents<Systems.Tracker>(this);
-			
-			//FactoryManager.RegisterPlayerFactory(this, new PlayerFactory());
 
 			Log.Info($"Plugin is loaded. API Endpoint is: {Config.ApiEndpoint}");
 
