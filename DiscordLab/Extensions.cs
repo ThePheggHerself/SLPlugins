@@ -1,4 +1,5 @@
-﻿using PlayerStatsSystem;
+﻿using PlayerRoles.PlayableScps.Scp939;
+using PlayerStatsSystem;
 using PluginAPI.Core;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,10 @@ namespace DiscordLab
 				return "SCP 018";
 			else if (aDH is Scp096DamageHandler scp096DH)
 				return "SCP 096";
+			else if (aDH is Scp049DamageHandler scp049DH)
+				return "SCP 049";
+			else if (aDH is Scp939DamageHandler scp939DH)
+				return "SCP 939";
 			else if (aDH is ScpDamageHandler scpDH)
 				return scpDH.Attacker.Hub.roleManager.CurrentRole.name;
 

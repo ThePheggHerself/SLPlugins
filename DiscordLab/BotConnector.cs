@@ -217,85 +217,91 @@ namespace DiscordLab
 		}
 		private string BanCommand(string[] arg, JObject jObject)
 		{
-			string command = arg[0];
-			string searchvariable = string.Empty;
-			TimeSpan duration;
-			string durationString = string.Empty;
-			string reason = string.Empty;
-			Player player = null;
-
-			if (arg.Count() < 4 || arg[1].Length < 1)
-				return $"```{arg[0]} [UserID/IP] [Duration] [Reason]```";
-
-			//Forces the search variable to the front of the array
-			arg = arg.Skip(1).ToArray();
-
-			if (arg[0].StartsWith("'") || arg[0].StartsWith("\""))
+			try
 			{
-				string result = string.Join(" ", arg).Split(new string[] { "\"" }, 3, StringSplitOptions.None)[1];
+				string command = arg[0];
+				string searchvariable = string.Empty;
+				TimeSpan duration;
+				string durationString = string.Empty;
+				string reason = string.Empty;
+				Player player = null;
 
-				searchvariable = result;
+				if (arg.Count() < 4 || arg[1].Length < 1)
+					return $"```{arg[0]} [UserID/IP] [Duration] [Reason]```";
 
-				arg = string.Join(" ", arg).Replace("\"" + result + "\"", string.Empty).Trim(' ').Split(' ');
-			}
-			else
-			{
-				searchvariable = arg[0];
-
+				//Forces the search variable to the front of the array
 				arg = arg.Skip(1).ToArray();
+
+				if (arg[0].StartsWith("'") || arg[0].StartsWith("\""))
+				{
+					string result = string.Join(" ", arg).Split(new string[] { "\"" }, 3, StringSplitOptions.None)[1];
+
+					searchvariable = result;
+
+					arg = string.Join(" ", arg).Replace("\"" + result + "\"", string.Empty).Trim(' ').Split(' ');
+				}
+				else
+				{
+					searchvariable = arg[0];
+
+					arg = arg.Skip(1).ToArray();
+				}
+
+				durationString = arg[0];
+				var chars = durationString.Where(Char.IsLetter).ToArray();
+				if (chars.Length < 1 || !int.TryParse(new string(durationString.Where(Char.IsDigit).ToArray()), out int amount) || !validUnits.Contains(chars[0]) || amount < 1)
+					return "```diff\n- Invalid duration provided```";
+
+				GetPlayer(searchvariable, out player);
+
+				duration = GetBanDuration(chars[0], amount);
+				arg = arg.Skip(1).ToArray();
+				reason = string.Join(" ", arg);
+
+				if (player != null)
+				{
+
+					BanHandler.IssueBan(new BanDetails
+					{
+						OriginalName = player.Nickname,
+						Id = player.UserId,
+						Issuer = jObject["Staff"].ToString(),
+						IssuanceTime = DateTime.UtcNow.Ticks,
+						Expires = DateTime.UtcNow.Add(duration).Ticks,
+						Reason = reason
+					}, BanHandler.BanType.UserId);
+
+					BanHandler.IssueBan(new BanDetails
+					{
+						OriginalName = player.Nickname,
+						Id = player.IpAddress,
+						Issuer = jObject["Staff"].ToString(),
+						IssuanceTime = DateTime.UtcNow.Ticks,
+						Expires = DateTime.UtcNow.Add(duration).Ticks,
+						Reason = reason
+					}, BanHandler.BanType.IP);
+
+					player.Disconnect($"You have been banned by the server staff\nReason: " + reason);
+
+					return $"`{player.Nickname} ({player.UserId})` was banned for {durationString} with reason: {reason}";
+				}
+				else
+				{
+					BanHandler.IssueBan(new BanDetails
+					{
+						OriginalName = "Offline player",
+						Id = searchvariable,
+						Issuer = jObject["Staff"].ToString(),
+						IssuanceTime = DateTime.UtcNow.Ticks,
+						Expires = DateTime.UtcNow.Add(duration).Ticks,
+						Reason = reason
+					}, searchvariable.Contains('@') ? BanHandler.BanType.UserId : BanHandler.BanType.IP);
+					return $"`{searchvariable}` was banned for {durationString} with reason: {reason}!";
+				}
 			}
-
-			durationString = arg[0];
-			var chars = durationString.Where(Char.IsLetter).ToArray();
-			if (chars.Length < 1 || !int.TryParse(new string(durationString.Where(Char.IsDigit).ToArray()), out int amount) || !validUnits.Contains(chars[0]) || amount < 1)
-				return "```diff\n- Invalid duration provided```";
-
-			if (!GetPlayer(searchvariable, out player))
-				return $"Unable to find player `{searchvariable.Replace("`", "\\`")}`";
-
-			duration = GetBanDuration(chars[0], amount);
-			arg = arg.Skip(1).ToArray();
-			reason = string.Join(" ", arg);
-
-			if (player != null)
+			catch (Exception e)
 			{
-
-				BanHandler.IssueBan(new BanDetails
-				{
-					OriginalName = player.Nickname,
-					Id = player.UserId,
-					Issuer = jObject["Staff"].ToString(),
-					IssuanceTime = DateTime.UtcNow.Ticks,
-					Expires = DateTime.UtcNow.Add(duration).Ticks,
-					Reason = reason
-				}, BanHandler.BanType.UserId);
-
-				BanHandler.IssueBan(new BanDetails
-				{
-					OriginalName = player.Nickname,
-					Id = player.IpAddress,
-					Issuer = jObject["Staff"].ToString(),
-					IssuanceTime = DateTime.UtcNow.Ticks,
-					Expires = DateTime.UtcNow.Add(duration).Ticks,
-					Reason = reason
-				}, BanHandler.BanType.IP);
-
-				player.Disconnect($"You have been banned by the server staff\nReason: " + reason);
-
-				return $"`{player.Nickname} ({player.UserId})` was banned for {durationString} with reason: {reason}";
-			}
-			else
-			{
-				BanHandler.IssueBan(new BanDetails
-				{
-					OriginalName = "Offline player",
-					Id = searchvariable,
-					Issuer = jObject["Staff"].ToString(),
-					IssuanceTime = DateTime.UtcNow.Ticks,
-					Expires = DateTime.UtcNow.Add(duration).Ticks,
-					Reason = reason
-				}, searchvariable.Contains('@') ? BanHandler.BanType.UserId : BanHandler.BanType.IP);
-				return $"`{searchvariable}` was banned for {durationString} with reason: {reason}!";
+				return e.ToString();
 			}
 		}
 

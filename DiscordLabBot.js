@@ -92,10 +92,10 @@ tcpSocket.on("connection", (socket) => {
             array.forEach(json => {
                 var object = JSON.parse(json)
 
-                if (object.Type === "msg") {
+                if (object.Type === 0) {
                     if (object.Message) messages.push(object.Message);
                 }
-                else if (object.Type === "supdate") {
+                else if (object.Type === 3) {
 
                     if (botClient.user != null) {
                         if (object.CurrentPlayers === "0/30")
@@ -106,7 +106,7 @@ tcpSocket.on("connection", (socket) => {
                         botClient.user.setActivity(`${object.CurrentPlayers}`, { type: 'WATCHING' })
                     }
                 }
-                else if (object.Type === "plist") {
+                else if (object.Type === 2) {
 
                     if (object.PlayerNames === "**No online players**") {
                         botClient.channels.cache.get(object.ChannelID).send(`${object.PlayerNames}`);
@@ -157,7 +157,7 @@ tcpSocket.on("connection", (socket) => {
                         botClient.channels.cache.get(object.ChannelID).send({ embeds: [embed] });
                     }
                 }
-                else if (object.Type === "cmdmsg") {
+                else if (object.Type === 1) {
                     botClient.channels.cache.get(object.ChannelID).send(`<@${object.StaffID}>\n` + object.CommandMessage)
                 }
                 else return

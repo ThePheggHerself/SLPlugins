@@ -21,7 +21,7 @@ namespace DiscordLab
 		public void PlayerJoinedEvent(Player plr) => DiscordLab.Bot.SendMessage(new Msg($"**{plr.Nickname} ({plr.UserId} from ||~~{plr.IpAddress}~~||) has joined the server**"));
 
 		[PluginEvent(ServerEventType.PlayerLeft)]
-		public void PlayerLeftEvent(Player plr) => DiscordLab.Bot.SendMessage(new Msg($"**{plr.Nickname} ({plr.UserId}) has disconnected from the server**"));
+		public void PlayerLeftEvent(Player plr) => DiscordLab.Bot.SendMessage(new Msg($"{plr.Nickname} ({plr.UserId}) has disconnected from the server"));
 
 		[PluginEvent(ServerEventType.PlayerDeath)]
 		public void PlayerDeathEvent(Player victim, Player attacker, DamageHandlerBase damageHandler)
@@ -29,7 +29,7 @@ namespace DiscordLab
 			if(damageHandler is AttackerDamageHandler aDH)
 			{
 				if (aDH.IsSuicide)
-					DiscordLab.Bot.SendMessage(new Msg($"**{victim.ToLogString()} killed themselves using {aDH.GetDamageSource()}**"));
+					DiscordLab.Bot.SendMessage(new Msg($"{victim.ToLogString()} killed themselves using {aDH.GetDamageSource()}"));
 				else if (aDH.IsFriendlyFire)
 					DiscordLab.Bot.SendMessage(new Msg($"**Teamkill** \n```autohotkey\nPlayer: {attacker.Role} {attacker.ToLogString()} \nKilled: {victim.Role} {victim.ToLogString()}\nUsing: {aDH.GetDamageSource()}```"));
 				else if (victim.IsDisarmed && !attacker.ReferenceHub.IsSCP())
@@ -78,7 +78,7 @@ namespace DiscordLab
 			if (damageHandler is AttackerDamageHandler aDH)
 			{
 				if (aDH.IsSuicide)
-					DiscordLab.Bot.SendMessage(new Msg($"**{victim.ToLogString()} damaged themselves using {aDH.GetDamageSource()}**"));
+					DiscordLab.Bot.SendMessage(new Msg($"{victim.ToLogString()} damaged themselves using {aDH.GetDamageSource()}"));
 				else if (aDH.IsFriendlyFire)
 					DiscordLab.Bot.SendMessage(new Msg($"**{attacker.Role} {attacker.ToLogString()} damaged {victim.Role} {victim.ToLogString()} using {aDH.GetDamageSource()} for {aDH.Damage}**"));
 				else if (victim.IsDisarmed && !attacker.ReferenceHub.IsSCP())
@@ -113,7 +113,7 @@ namespace DiscordLab
 		[PluginEvent(ServerEventType.PlayerSpawn)]
 		public void PlayerSpawnEvent(Player player, RoleTypeId role)
 		{
-			if (role == RoleTypeId.None)
+			if (role == RoleTypeId.None || role == RoleTypeId.Spectator)
 				return;
 			DiscordLab.Bot.SendMessage(new Msg($"{player.ToLogString()} spawned as {role}"));
 		}
