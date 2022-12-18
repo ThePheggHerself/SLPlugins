@@ -16,8 +16,8 @@ namespace DynamicTags.Systems
 {
 	public class Tracker
 	{
-		[PluginEvent(ServerEventType.PlayerPreauth)]
-		public void OnPreauth(string userid, string ipAddress, long expiration, CentralAuthPreauthFlags flags, string region, byte[] signature, ConnectionRequest connectionRequest, int readerStartPosition)
+		[PluginEvent(ServerEventType.PlayerJoined)]
+		public void OnPlayerJoin(Player player)
 		{
 			//if (flags.HasFlag(CentralAuthPreauthFlags.NorthwoodStaff))
 			//	return;
@@ -26,9 +26,9 @@ namespace DynamicTags.Systems
 			{
 				if (Extensions.TryParseJSON(client.UploadString(Plugin.Config.ApiEndpoint + "PlayerJoin.php", JsonConvert.SerializeObject(new PlayerDetails
 				{
-					UserId = userid,
+					UserId = player.UserId,
 					UserName = "null",
-					Address = ipAddress,
+					Address = player.IpAddress,
 					ServerAddress = Server.ServerIpAddress,
 					ServerPort = Server.Port.ToString()
 				})), out JObject jObj))
@@ -36,11 +36,8 @@ namespace DynamicTags.Systems
 					//Checks if the external server has blocked the player from joining.
 					if (bool.TryParse(jObj["block"].ToString(), out bool shouldKick) && shouldKick)
 					{
-						Log.Info($"{userid}'s connection request was rejected. Reason: {jObj["serverReason"].ToString()}");
-						NetDataWriter Writer = new NetDataWriter();
-						Writer.Put((byte)RejectionReason.Custom);
-						Writer.Put(jObj["reason"].ToString());
-						connectionRequest.RejectForce(Writer);
+						Log.Info($"{player.PlayerId} was kicked. Reason: {jObj["serverReason"]}");
+						player.Kick(jObj["reason"].ToString());
 					}
 				}
 			}
