@@ -8,19 +8,17 @@ namespace DynamicTags
 {
 	public class TagData
 	{
-		public string UserID;
-		public string Prefix;
-		public string Suffix;
-		public string Colour;
-		public bool HasReservedSlot;
-		public ulong Permissions;
+		public bool ReservedSlot { get; set; }
 
-		public string Group;
+		public string UserID { get; set; }
 
-		public string FullTag
-		{
-			get => $"{Prefix} - {Suffix}";
-		}
+		public string Tag { get; set; }
+
+		public string Colour { get; set; }
+
+		public ulong Perms { get; set; }
+
+		public string Group { get; set; }
 	}
 	public class PlayerDetails
 	{
@@ -31,13 +29,29 @@ namespace DynamicTags
 		public string ServerAddress;
 		public string ServerPort;
 	}
-	internal class PlayerBanDetails
+	public class PlayerBanDetails
 	{
-		public string playerName { get; set; }
-		public string playerID { get; set; }
-		public string adminName { get; set; }
-		public string adminID { get; set; }
-		public string duration { get; set; }
-		public string reason { get; set; }
+		public string PlayerName { get; set; }
+		public string PlayerID { get; set; }
+		public string AdminName { get; set; }
+		public string AdminID { get; set; }
+		public string Duration { get; set; }
+		public string Reason { get; set; }
+	}
+
+	public class PlayerReportDetails
+	{
+		public string PlayerName { get; set; }
+		public string PlayerID { get; set; }
+		public string PlayerRole { get; set; }
+
+		public string ReporterName { get; set; }
+		public string ReporterID { get; set; }
+		public string ReporterRole { get; set; }
+
+		public string Reason { get; set; }
+
+		public string ServerAddress { get; set; }
+		public string ServerPort { get; set; }
 	}
 }

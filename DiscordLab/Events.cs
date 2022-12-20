@@ -21,12 +21,16 @@ namespace DiscordLab
 		public void PlayerJoinedEvent(Player plr) => DiscordLab.Bot.SendMessage(new Msg($"**{plr.Nickname} ({plr.UserId} from ||~~{plr.IpAddress}~~||) has joined the server**"));
 
 		[PluginEvent(ServerEventType.PlayerLeft)]
-		public void PlayerLeftEvent(Player plr) => DiscordLab.Bot.SendMessage(new Msg($"{plr.Nickname} ({plr.UserId}) has disconnected from the server"));
+		public void PlayerLeftEvent(Player plr)
+		{
+			if (!string.IsNullOrEmpty(plr.UserId))
+				DiscordLab.Bot.SendMessage(new Msg($"{plr.Nickname} ({plr.UserId}) has disconnected from the server"));
+		}
 
 		[PluginEvent(ServerEventType.PlayerDeath)]
 		public void PlayerDeathEvent(Player victim, Player attacker, DamageHandlerBase damageHandler)
 		{
-			if(damageHandler is AttackerDamageHandler aDH)
+			if (damageHandler is AttackerDamageHandler aDH)
 			{
 				if (aDH.IsSuicide)
 					DiscordLab.Bot.SendMessage(new Msg($"{victim.ToLogString()} killed themselves using {aDH.GetDamageSource()}"));
@@ -50,7 +54,7 @@ namespace DiscordLab
 		[PluginEvent(ServerEventType.GrenadeExploded)]
 		public void GrenadeExplodeEvent(ItemPickupBase grenade)
 		{
-			if(grenade is ExplosionGrenade expGrenade)
+			if (grenade is ExplosionGrenade expGrenade)
 				DiscordLab.Bot.SendMessage(new Msg($"Frag grenade of {expGrenade.PreviousOwner.Nickname} has exploded"));
 			else if (grenade is FlashbangGrenade flshGrenade)
 				DiscordLab.Bot.SendMessage(new Msg($"Flashbang of {flshGrenade.PreviousOwner.Nickname} has exploded"));
@@ -126,7 +130,7 @@ namespace DiscordLab
 				+ $"\nEscaped Class-D: {RoundSummary.EscapedClassD}"
 				+ $"\nRescued Scientists: {RoundSummary.EscapedScientists}"
 				+ $"\nSurviving SCPs: {RoundSummary.SurvivingSCPs}"
-				+ $"\nWarhead Status: {(Warhead.IsDetonated ? "Not Detonated" : $"Detonated")}" 
+				+ $"\nWarhead Status: {(Warhead.IsDetonated ? "Not Detonated" : $"Detonated")}"
 				+ $"\nDeaths: {RoundSummary.Kills} ({RoundSummary.KilledBySCPs} by SCPs)```"));
 		}
 
@@ -162,6 +166,6 @@ namespace DiscordLab
 		public void PlayerUnmuteEvent(Player player, bool isIntercom) => DiscordLab.Bot.SendMessage(new Msg($"{player.ToLogString()} is no longer {(isIntercom ? "intercom " : "")}muted"));
 
 		[PluginEvent(ServerEventType.PlayerRemoteAdminCommand)]
-		public void RemoteAdminCommandEvent(Player player, string command, string[] arguments) => DiscordLab.Bot.SendMessage(new Msg($"{player.ToLogString()} has run the following command: **{(arguments.Length > 0 ? $"{command} {string.Join(" ", arguments)}" : $"{command}")}**"));	
+		public void RemoteAdminCommandEvent(Player player, string command, string[] arguments) => DiscordLab.Bot.SendMessage(new Msg($"{player.ToLogString()} has run the following command: **{(arguments.Length > 0 ? $"{command} {string.Join(" ", arguments)}" : $"{command}")}**"));
 	}
 }

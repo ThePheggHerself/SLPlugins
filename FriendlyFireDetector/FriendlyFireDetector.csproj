@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7094DF01-C506-4628-8B04-3CFA007CF564}</ProjectGuid>
+    <ProjectGuid>{82A6FD08-75CC-461E-BBFA-58F05EAB0630}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DiscordLab</RootNamespace>
-    <AssemblyName>DiscordLab</AssemblyName>
+    <RootNamespace>FriendlyFireDetector</RootNamespace>
+    <AssemblyName>FriendlyFireDetector</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -43,14 +43,6 @@
     <Reference Include="Mirror">
       <HintPath>..\References\Mirror.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.3-beta1\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="PluginAPI, Version=12.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\Northwood.PluginAPI.12.0.0-rc.4\lib\net48\PluginAPI.dll</HintPath>
     </Reference>
@@ -68,21 +60,18 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\References\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.12.2.1\lib\net47\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.11.0.1\lib\net45\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotConnector.cs" />
-    <Compile Include="DiscordLabConfig.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="DataClasses.cs" />
-    <Compile Include="Events.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="DiscordLab.cs" />
+    <Compile Include="Handler.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
